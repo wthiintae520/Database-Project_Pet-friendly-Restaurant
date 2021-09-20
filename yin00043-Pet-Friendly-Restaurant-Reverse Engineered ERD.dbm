@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.1" last-position="0,209" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<role name="yin"
+      inherit="true"
+      login="true"
+      encrypted="true"
+      password="********">
+</role>
+
+<role name="web"
+      inherit="true"
+      encrypted="true"
+      password="********">
+	<roles names="yin" role-type="member" />
+</role>
+
+<database name="Pet-Friendly-Restaurant" encoding="UTF8" lc-collate="English_Canada.1252" lc-ctype="English_Canada.1252" is-template="false" allow-conns="true">
+	<role name="web"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="customer_t">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="100"/>
+	<column name="cust_membership" not-null="true">
+		<type name="character" length="5"/>
+	</column>
+	<column name="cust_name" not-null="true">
+		<type name="character varying" length="30"/>
+	</column>
+	<column name="cust_phone" not-null="true">
+		<type name="character varying" length="15"/>
+	</column>
+	<column name="cust_pet">
+		<type name="character" length="2"/>
+	</column>
+	<constraint name="customer_pk" type="pk-constr" table="public.customer_t">
+		<columns names="cust_membership" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="pet_t">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="740" y="100"/>
+	<column name="pet_membership" not-null="true">
+		<type name="character" length="5"/>
+	</column>
+	<column name="pet_name" not-null="true">
+		<type name="character varying" length="30"/>
+	</column>
+	<column name="pet_type" not-null="true">
+		<type name="character varying" length="10"/>
+	</column>
+	<column name="own_membership">
+		<type name="character" length="5"/>
+	</column>
+	<constraint name="pet_pk" type="pk-constr" table="public.pet_t">
+		<columns names="pet_membership" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="meat_t">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="740" y="480"/>
+	<column name="meat_number" not-null="true">
+		<type name="character" length="3"/>
+	</column>
+	<column name="meat_name" not-null="true">
+		<type name="character varying" length="15"/>
+	</column>
+	<column name="meat_quantity" not-null="true">
+		<type name="numeric" length="5" precision="0"/>
+	</column>
+	<column name="meat_price" not-null="true">
+		<type name="numeric" length="5" precision="2"/>
+	</column>
+	<column name="pet_membership">
+		<type name="character" length="5"/>
+	</column>
+	<constraint name="meat_ck" type="ck-constr" table="public.meat_t">
+			<expression><![CDATA[(meat_price >= (0)::numeric)]]></expression>
+	</constraint>
+	<constraint name="meat_pk" type="pk-constr" table="public.meat_t">
+		<columns names="meat_number" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="vegetable_t">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="920"/>
+	<column name="vege_number" not-null="true">
+		<type name="character" length="3"/>
+	</column>
+	<column name="vege_name" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="vege_quantity" not-null="true">
+		<type name="numeric" length="5" precision="0"/>
+	</column>
+	<column name="vege_price" not-null="true">
+		<type name="numeric" length="5" precision="2"/>
+	</column>
+	<constraint name="vegetable_ck" type="ck-constr" table="public.vegetable_t">
+			<expression><![CDATA[(vege_price >= (0)::numeric)]]></expression>
+	</constraint>
+	<constraint name="vegetable_pk" type="pk-constr" table="public.vegetable_t">
+		<columns names="vege_number" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="humanmeal_t">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="80" y="460"/>
+	<column name="meal_number" not-null="true">
+		<type name="character" length="3"/>
+	</column>
+	<column name="meal_name" not-null="true">
+		<type name="character varying" length="35"/>
+	</column>
+	<column name="meal_price" not-null="true">
+		<type name="numeric" length="5" precision="2"/>
+	</column>
+	<column name="ingr_meat">
+		<type name="character" length="3"/>
+	</column>
+	<column name="ingr_vegetable">
+		<type name="character" length="3"/>
+	</column>
+	<column name="cust_membership">
+		<type name="character" length="8"/>
+	</column>
+	<constraint name="humanmeal_pk" type="pk-constr" table="public.humanmeal_t">
+		<columns names="meal_number" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<view name="cat_v">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="620" y="740"/>
+	<reference>
+		<expression><![CDATA[ SELECT pet_t.pet_membership,
+    pet_t.pet_name,
+    pet_t.pet_type,
+    pet_t.own_membership
+   FROM pet_t
+  WHERE ((pet_t.pet_type)::text = 'Cat'::text);]]></expression>
+	</reference>
+</view>
+
+<view name="dog_v">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="880" y="740"/>
+	<reference>
+		<expression><![CDATA[ SELECT pet_t.pet_membership,
+    pet_t.pet_name,
+    pet_t.pet_type,
+    pet_t.own_membership
+   FROM pet_t
+  WHERE ((pet_t.pet_type)::text = 'Dog'::text);]]></expression>
+	</reference>
+</view>
+
+<constraint name="pet_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.customer_t" table="public.pet_t">
+	<columns names="own_membership" ref-type="src-columns"/>
+	<columns names="cust_membership" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="meat_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.pet_t" table="public.meat_t">
+	<columns names="pet_membership" ref-type="src-columns"/>
+	<columns names="pet_membership" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="humanmeal_fk1" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.meat_t" table="public.humanmeal_t">
+	<columns names="ingr_meat" ref-type="src-columns"/>
+	<columns names="meat_number" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="humanmeal_fk2" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.vegetable_t" table="public.humanmeal_t">
+	<columns names="ingr_vegetable" ref-type="src-columns"/>
+	<columns names="vege_number" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="humanmeal_fk3" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.customer_t" table="public.humanmeal_t">
+	<columns names="cust_membership" ref-type="src-columns"/>
+	<columns names="cust_membership" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_pet_t_customer_t" type="relfk"
+	 custom-color="#83af1f"
+	 src-table="public.pet_t"
+	 dst-table="public.customer_t" reference-fk="pet_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_meat_t_pet_t" type="relfk"
+	 custom-color="#5aa578"
+	 src-table="public.meat_t"
+	 dst-table="public.pet_t" reference-fk="meat_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_humanmeal_t_meat_t" type="relfk"
+	 custom-color="#4b3e56"
+	 src-table="public.humanmeal_t"
+	 dst-table="public.meat_t" reference-fk="humanmeal_fk1"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_humanmeal_t_vegetable_t" type="relfk"
+	 custom-color="#9ac721"
+	 src-table="public.humanmeal_t"
+	 dst-table="public.vegetable_t" reference-fk="humanmeal_fk2"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_humanmeal_t_customer_t" type="relfk"
+	 custom-color="#249b49"
+	 src-table="public.humanmeal_t"
+	 dst-table="public.customer_t" reference-fk="humanmeal_fk3"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>

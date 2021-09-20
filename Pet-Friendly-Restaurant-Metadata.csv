@@ -1,0 +1,7 @@
+Name,Type,Length,Description,Source
+meal_number,character,3,code number of meal,assigned by restaurant
+meal_name,character varying,35,name of meal,named by restaurant
+meal_price,numeric,"5,2",price of meal,decided by restaurant
+ingr_meat,character,3,the code number of meat that is contained in the meal,decided by restaurant
+ingr_vegetable,character,3,the code number of vegetable that is contained in the meal,decided by restaurant
+cust_membership,character,8,the membership number of customer who orders the meal,inputted by restaurant staff
